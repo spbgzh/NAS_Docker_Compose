@@ -1,0 +1,41 @@
+version: '3'
+
+services:  # 定义服务
+  stirling-pdf:
+    container_name: Stirling-PDF  # 容器名称
+    image: stirlingtools/stirling-pdf  # 使用的Docker镜像
+    deploy:
+      resources:
+        limits:
+          memory: 6G  
+    healthcheck:  # 健康检查配置
+      test: ["CMD-SHELL", "curl -f http://localhost:9080/api/v1/info/status | grep -q 'UP' && curl -fL http://localhost:9080/ | grep -q 'Please sign in'"]  # 健康检查命令
+      interval: 5s  # 健康检查间隔时间
+      timeout: 10s  # 健康检查超时时间
+      retries: 16  # 健康检查重试次数
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.55
+    volumes:
+      - /volume1/docker/stirling-pdf/trainingData:/usr/share/tessdata:rw  # 目录映射，挂载本地trainingData目录到容器内的/usr/share/tessdata目录，读写权限
+      - /volume1/docker/stirling-pdf/customFiles:/customFiles:rw  # 目录映射，挂载本地customFiles目录到容器内的/customFiles目录，读写权限
+      - /volume1/docker/stirling-pdf/logs:/logs:rw  # 目录映射，挂载本地logs目录到容器内的/logs目录，读写权限
+      - /volume1/docker/stirling-pdf/configs:/configs:rw  # 目录映射，挂载本地configs目录到容器内的/configs目录，读写权限
+    environment:  # 环境变量配置
+      DOCKER_ENABLE_SECURITY: "false"  # 启用安全性
+      SECURITY_ENABLELOGIN: "false"  # 启用登录
+      PUID: 0  
+      PGID: 0  
+      UMASK: "022"  # 默认文件权限掩码
+      SYSTEM_DEFAULTLOCALE: en-US  # 系统默认区域设置
+      UI_APPNAME: Stirling-PDF  # UI应用名称
+      UI_HOMEDESCRIPTION: Demo site for Stirling-PDF Latest-fat with Security  # UI主页描述
+      UI_APPNAMENAVBAR: Stirling-PDF  # UI导航栏应用名称
+      SYSTEM_MAXFILESIZE: "100"  # 系统最大文件大小
+      METRICS_ENABLED: "true"  # 启用指标
+      SYSTEM_GOOGLEVISIBILITY: "false"  # 启用谷歌可见性
+    restart: on-failure:5  # 当容器因故障停止时重新启动容器，最多重启5次
+
+networks:
+  docker_macvlan:
+    external: true

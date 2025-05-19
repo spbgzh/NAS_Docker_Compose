@@ -1,0 +1,28 @@
+version: "3"
+services:
+  emby:
+    image: emby/embyserver:latest
+    container_name: emby-jav-server
+    restart: always
+    environment:
+      UID: 0
+      GID: 0
+      GIDLIST: 2
+      TZ: Asia/Shanghai
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /volume1/docker/emby/config:/config
+      - /mnt/@ext/5000cca2a1dd7af0-p2:/media
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.66
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+networks:
+  docker_macvlan:
+    external: true
