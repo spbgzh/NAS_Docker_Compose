@@ -12,7 +12,7 @@ services:
     devices:
       - /dev/dri:/dev/dri
     volumes:
-      - /volume1/docker/emby/config:/config
+      - /volume1/docker/emby-jav/config:/config
       - /mnt/@ext/5000cca2a1dd7af0-p2:/media
     networks:
       docker_macvlan:
@@ -22,6 +22,15 @@ services:
       options:
         max-size: "50m"
         max-file: "3"
+  metatube:
+    image: ghcr.io/metatube-community/metatube-server:latest
+    container_name: metatube-jav-server
+    restart: always
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.67
+    ports:
+      - "8080:8080"
 
 networks:
   docker_macvlan:

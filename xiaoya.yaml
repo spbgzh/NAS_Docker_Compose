@@ -1,9 +1,11 @@
+version: "3"
+
 services:
   alist:
     image: ghcr.io/monlor/xiaoya-alist:latest
     container_name: xiaoya-alist
     volumes:
-      - xiaoya:/data
+      - /volume1/docker/docker-xiaoya/data/xiaoya:/data
     ports:
       - "5678:5678"
       - "2345:2345"
@@ -21,11 +23,11 @@ services:
     env_file:
       - env
     volumes:
-      - xiaoya:/etc/xiaoya
-      - media:/media/xiaoya
-      - config:/media/config
-      - cache:/media/config/cache
-      - meta:/media/temp
+      - /volume1/docker/docker-xiaoya/data/xiaoya:/etc/xiaoya
+      - /volume1/docker/docker-xiaoya/data/media:/media/xiaoya
+      - /volume1/docker/docker-xiaoya/data/config:/media/config
+      - /volume1/docker/docker-xiaoya/data/cache:/media/config/cache
+      - /volume1/docker/docker-xiaoya/data/meta:/media/temp
     depends_on:
       - alist
     restart: unless-stopped
@@ -42,9 +44,9 @@ services:
       - metadata
       - alist
     volumes:
-      - media:/media
-      - config:/config
-      - cache:/cache
+      - /volume1/docker/docker-xiaoya/data/media:/media
+      - /volume1/docker/docker-xiaoya/data/config:/config
+      - /volume1/docker/docker-xiaoya/data/cache:/cache
     ports:
       - "6908:6908"
     restart: unless-stopped
@@ -53,10 +55,3 @@ services:
 
 networks:
   default:
-
-volumes:
-  xiaoya:
-  media:
-  config:
-  meta:
-  cache:
