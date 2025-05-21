@@ -1,5 +1,4 @@
 version: "3"
-
 services:
   stirling-pdf:
     container_name: stirling-pdf
@@ -26,7 +25,6 @@ services:
       METRICS_ENABLED: "true"
       SYSTEM_GOOGLEVISIBILITY: "false"
     restart: always
-
 networks:
   docker_macvlan:
     external: true
