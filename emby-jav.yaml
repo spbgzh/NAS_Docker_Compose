@@ -25,12 +25,9 @@ services:
   metatube:
     image: ghcr.io/metatube-community/metatube-server:latest
     container_name: metatube-jav-server
-    restart: always
-    networks:
-      docker_macvlan:
-        ipv4_address: 192.168.1.67
     ports:
       - "8080:8080"
+    restart: always
 
 networks:
   docker_macvlan:
