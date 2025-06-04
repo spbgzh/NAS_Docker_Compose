@@ -1,0 +1,36 @@
+version: "3"
+services:
+  emby:
+    image: emby/embyserver:latest
+    container_name: jav-emby-server
+    restart: always
+    environment:
+      UID: 0
+      GID: 0
+      GIDLIST: 2
+      TZ: Asia/Shanghai
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /volume1/docker/jav-emby/config:/config
+      - /mnt/@ext/5000cca2a1dd7af0-p2:/media
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.66
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+  metatube:
+    image: ghcr.io/metatube-community/metatube-server:latest
+    container_name: jav-metatube-server
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.67
+    restart: always
+
+
+networks:
+  docker_macvlan:
+    external: true

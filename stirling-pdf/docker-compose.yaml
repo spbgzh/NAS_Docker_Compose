@@ -1,0 +1,30 @@
+version: "3"
+services:
+  stirling-pdf:
+    container_name: stirling-pdf
+    image: stirlingtools/stirling-pdf
+    networks:
+      docker_macvlan:
+        ipv4_address: 192.168.1.77
+    volumes:
+      - /volume1/docker/stirling-pdf/trainingData:/usr/share/tessdata:rw
+      - /volume1/docker/stirling-pdf/customFiles:/customFiles:rw
+      - /volume1/docker/stirling-pdf/logs:/logs:rw
+      - /volume1/docker/stirling-pdf/configs:/configs:rw
+    environment:
+      DOCKER_ENABLE_SECURITY: "false"
+      SECURITY_ENABLELOGIN: "false"
+      PUID: 0
+      PGID: 0
+      UMASK: "022"
+      SYSTEM_DEFAULTLOCALE: en-US
+      UI_APPNAME: Stirling-PDF
+      UI_HOMEDESCRIPTION: Stirling-PDF Web Application
+      UI_APPNAMENAVBAR: Stirling-PDF
+      SYSTEM_MAXFILESIZE: "100"
+      METRICS_ENABLED: "true"
+      SYSTEM_GOOGLEVISIBILITY: "false"
+    restart: always
+networks:
+  docker_macvlan:
+    external: true

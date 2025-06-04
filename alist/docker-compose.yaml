@@ -1,0 +1,26 @@
+version: '3'
+services:
+  alist:
+    image: xhofe/alist:latest-aio
+    container_name: alist
+    volumes:
+      - /volume1/docker/alist/data:/opt/alist/data
+      - /volume1/docker/alist/entrypoint.sh:/opt/alist/entrypoint.sh
+    networks:
+      bridge_net:
+      docker_macvlan:
+        ipv4_address: 192.168.1.55
+    entrypoint: sh /opt/alist/entrypoint.sh
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+    restart: unless-stopped
+
+networks:
+  docker_macvlan:
+    external: true
+  bridge_net:
+    driver: bridge
